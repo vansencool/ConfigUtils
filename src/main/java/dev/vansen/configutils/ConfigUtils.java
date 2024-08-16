@@ -5,7 +5,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * This class holds a instance of JavaPlugin
+ * This class holds an instance of JavaPlugin
  */
 @SuppressWarnings("unused")
 public class ConfigUtils {

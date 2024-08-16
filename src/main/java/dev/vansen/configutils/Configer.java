@@ -3,9 +3,11 @@ package dev.vansen.configutils;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
@@ -383,6 +385,18 @@ public class Configer {
     }
 
     /**
+     * Sets the comments for a given path.
+     *
+     * @param path     The path to the section.
+     * @param comments The comments.
+     * @throws NullPointerException If the path is {@code null}.
+     */
+    public void setComments(String path, List<String> comments) {
+        if (path == null) throw new NullPointerException("Path cannot be null");
+        config.setComments(path, comments);
+    }
+
+    /**
      * Checks if the value at the specified path is a configuration section.
      *
      * @param path The path to check.
@@ -599,6 +613,40 @@ public class Configer {
     }
 
     /**
+     * Gets a list of characters from the configuration.
+     *
+     * @param path The path to the list.
+     * @return The list of characters.
+     * @throws NullPointerException If the path is {@code null}.
+     */
+    public List<Character> getCharacterList(String path) {
+        if (path == null) throw new NullPointerException("Path cannot be null");
+        return config.getCharacterList(path);
+    }
+
+    /**
+     * Gets a list of values from the configuration.
+     *
+     * @param deep Whether to get a deep list,
+     * @return The list of values.
+     */
+    public Map<String, Object> getValues(boolean deep) {
+        return config.getValues(deep);
+    }
+
+    /**
+     * Gets a list of inline comments from the configuration.
+     *
+     * @param path The path to the list.
+     * @return The list of inline comments.
+     * @throws NullPointerException If the path is {@code null}.
+     */
+    public List<String> getInlineComments(String path) {
+        if (path == null) throw new NullPointerException("Path cannot be null");
+        return config.getInlineComments(path);
+    }
+
+    /**
      * Gets a location from the configuration.
      *
      * @param path The path to the location.
@@ -710,6 +758,33 @@ public class Configer {
     }
 
     /**
+     * Gets a serializable from the configuration.
+     *
+     * @param path  The path to the serializable.
+     * @param clazz the type of {@code ConfigurationSerializable}
+     * @return The serializable.
+     * @throws NullPointerException If the path is {@code null}.
+     */
+    public <T extends ConfigurationSerializable> T getSerializable(String path, Class<T> clazz) {
+        if (path == null) throw new NullPointerException("Path cannot be null");
+        return config.getSerializable(path, clazz);
+    }
+
+    /**
+     * Gets a serializable from the configuration, or a default if it's not found.
+     *
+     * @param path  The path to the serializable.
+     * @param clazz the type of {@code ConfigurationSerializable}
+     * @param def   The default serializable.
+     * @return The serializable or the default.
+     * @throws NullPointerException If the path is {@code null}.
+     */
+    public <T extends ConfigurationSerializable> T getSerializable(String path, Class<T> clazz, T def) {
+        if (path == null) throw new NullPointerException("Path cannot be null");
+        return config.getSerializable(path, clazz, def);
+    }
+
+    /**
      * Creates a new section in the configuration with initial values.
      *
      * @param path   The path to the section.
@@ -746,6 +821,52 @@ public class Configer {
     }
 
     /**
+     * Adds a default value to the configuration.
+     *
+     * @param path  The path to the default value.
+     * @param value The default value.
+     * @throws NullPointerException If the path is {@code null}.
+     */
+    public void addDefault(String path, Object value) {
+        if (path == null) throw new NullPointerException("Path cannot be null");
+        config.addDefault(path, value);
+    }
+
+    /**
+     * Adds default values to the configuration.
+     *
+     * @param defaults The default values.
+     */
+    public void addDefaults(Configuration defaults) {
+        config.addDefaults(defaults);
+    }
+
+    /**
+     * Checks if the configuration contains a path.
+     *
+     * @param path          The path to check.
+     * @param ignoreDefault Whether to ignore if a default value for the specified path exists.
+     * @return If the path exists.
+     * @throws NullPointerException If the path is {@code null}.
+     */
+    public boolean contains(String path, boolean ignoreDefault) {
+        if (path == null) throw new NullPointerException("Path cannot be null");
+        return config.contains(path, ignoreDefault);
+    }
+
+    /**
+     * Checks if the configuration contains a path.
+     *
+     * @param path The path to check.
+     * @return true If the path exists.
+     * @throws NullPointerException If the path is {@code null}.
+     */
+    public boolean contains(String path) {
+        if (path == null) throw new NullPointerException("Path cannot be null");
+        return config.contains(path);
+    }
+
+    /**
      * Turns on or off copying of default values to the configuration.
      *
      * @param value If true, copies default values.
@@ -773,12 +894,57 @@ public class Configer {
     }
 
     /**
+     * Gets the parent of the configuration.
+     *
+     * @return The parent.
+     */
+    public ConfigurationSection getParent() {
+        return config.getParent();
+    }
+
+    /**
+     * Gets the root of the configuration.
+     *
+     * @return The root.
+     */
+    public Configuration getRoot() {
+        return config.getRoot();
+    }
+
+    /**
      * Gets the header of the configuration.
      *
      * @return The header text.
      */
     public String optionsHeader() {
         return config.options().header();
+    }
+
+    /**
+     * Gets the header of the configuration.
+     *
+     * @return The header list.
+     */
+    public List<String> getHeader() {
+        return config.options().getHeader();
+    }
+
+    /**
+     * Checks if parsing comments is turned on.
+     *
+     * @return True if parsing comments is turned on.
+     */
+    public boolean parseComments() {
+        return config.options().parseComments();
+    }
+
+    /**
+     * Turns on or off parsing of comments in the configuration.
+     *
+     * @param value If true (by default), parses comments.
+     */
+    public void parseComments(boolean value) {
+        config.options().parseComments(value);
     }
 
     /**
