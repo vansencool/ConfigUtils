@@ -7,6 +7,7 @@ import java.util.concurrent.CompletableFuture;
 /**
  * This class holds a instance of JavaPlugin
  */
+@SuppressWarnings("unused")
 public class ConfigUtils {
     /**
      * Stores the instance of the JavaPlugin that is being managed by this class.
