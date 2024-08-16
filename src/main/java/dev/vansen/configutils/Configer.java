@@ -16,14 +16,14 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * Config is the helper class that lets you easily manage YAML configuration files.
+ * Configer is the helper class that lets you easily manage YAML configuration files.
  */
 @SuppressWarnings("unused")
-public class Config {
+public class Configer {
     private final File configFile;
     private FileConfiguration config;
 
-    private Config(String fileName) {
+    private Configer(String fileName) {
         if (fileName == null) {
             throw new NullPointerException("File name cannot be null");
         }
@@ -34,14 +34,24 @@ public class Config {
      * Loads the configuration file.
      *
      * @param fileName The name of the file.
-     * @return A CompletableFuture that will complete with the Config instance.
+     * @return The Configer instance.
+     * @throws NullPointerException If the file name is {@code null}.
      */
-    public static CompletableFuture<Config> load(String fileName) {
-        return CompletableFuture.supplyAsync(() -> {
-            Config config = new Config(fileName);
-            config.config = YamlConfiguration.loadConfiguration(config.configFile);
-            return config;
-        });
+    public static Configer load(String fileName) {
+        Configer configer = new Configer(fileName);
+        configer.config = YamlConfiguration.loadConfiguration(configer.configFile);
+        return configer;
+    }
+
+    /**
+     * Loads the configuration file asynchronously.
+     *
+     * @param fileName The name of the file.
+     * @return A CompletableFuture that will complete with the Configer instance.
+     * @throws NullPointerException If the file name is {@code null}.
+     */
+    public static CompletableFuture<Configer> loadAsync(String fileName) {
+        return CompletableFuture.supplyAsync(() -> load(fileName));
     }
 
     /**
@@ -50,7 +60,7 @@ public class Config {
     public void save() {
         try {
             config.save(configFile);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
         }
     }
@@ -85,6 +95,7 @@ public class Config {
      *
      * @param deep If true, gets keys in nested sections too.
      * @return A set of keys.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public Set<String> getKeys(boolean deep) {
         return config.getKeys(deep);
@@ -96,6 +107,7 @@ public class Config {
      * @param path The path to look in.
      * @param deep If true, gets keys in nested sections too.
      * @return A set of keys.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public Set<String> getKeys(String path, boolean deep) {
         if (path == null) throw new NullPointerException("Path cannot be null");
@@ -108,6 +120,7 @@ public class Config {
      * @param path The path to the value.
      * @param <T>  The type of the value.
      * @return The value.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public <T> T get(String path) {
         if (path == null) throw new NullPointerException("Path cannot be null");
@@ -121,6 +134,7 @@ public class Config {
      * @param def  The default value.
      * @param <T>  The type of the value.
      * @return The value or the default.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public <T> T get(String path, T def) {
         if (path == null) throw new NullPointerException("Path cannot be null");
@@ -132,6 +146,7 @@ public class Config {
      *
      * @param path The path to the string.
      * @return The string.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public String getString(String path) {
         if (path == null) throw new NullPointerException("Path cannot be null");
@@ -144,6 +159,7 @@ public class Config {
      * @param path The path to the string.
      * @param def  The default string.
      * @return The string or the default.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public String getString(String path, String def) {
         if (path == null) throw new NullPointerException("Path cannot be null");
@@ -155,6 +171,7 @@ public class Config {
      *
      * @param path The path to the integer.
      * @return The integer.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public int getInt(String path) {
         if (path == null) throw new NullPointerException("Path cannot be null");
@@ -167,6 +184,7 @@ public class Config {
      * @param path The path to the integer.
      * @param def  The default integer.
      * @return The integer or the default.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public int getInt(String path, int def) {
         if (path == null) throw new NullPointerException("Path cannot be null");
@@ -178,6 +196,7 @@ public class Config {
      *
      * @param path The path to the boolean.
      * @return The boolean.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public boolean getBoolean(String path) {
         if (path == null) throw new NullPointerException("Path cannot be null");
@@ -190,6 +209,7 @@ public class Config {
      * @param path The path to the boolean.
      * @param def  The default boolean.
      * @return The boolean or the default.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public boolean getBoolean(String path, boolean def) {
         if (path == null) throw new NullPointerException("Path cannot be null");
@@ -201,6 +221,7 @@ public class Config {
      *
      * @param path The path to the double.
      * @return The double.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public double getDouble(String path) {
         if (path == null) throw new NullPointerException("Path cannot be null");
@@ -213,6 +234,7 @@ public class Config {
      * @param path The path to the double.
      * @param def  The default double.
      * @return The double or the default.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public double getDouble(String path, double def) {
         if (path == null) throw new NullPointerException("Path cannot be null");
@@ -224,6 +246,7 @@ public class Config {
      *
      * @param path The path to the long.
      * @return The long.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public long getLong(String path) {
         if (path == null) throw new NullPointerException("Path cannot be null");
@@ -236,6 +259,7 @@ public class Config {
      * @param path The path to the long.
      * @param def  The default long.
      * @return The long or the default.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public long getLong(String path, long def) {
         if (path == null) throw new NullPointerException("Path cannot be null");
@@ -247,6 +271,7 @@ public class Config {
      *
      * @param path The path to the list.
      * @return The list.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public List<?> getList(String path) {
         if (path == null) throw new NullPointerException("Path cannot be null");
@@ -259,6 +284,7 @@ public class Config {
      * @param path The path to the list.
      * @param def  The default list.
      * @return The list or the default.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public List<?> getList(String path, List<?> def) {
         if (path == null) throw new NullPointerException("Path cannot be null");
@@ -270,8 +296,10 @@ public class Config {
      *
      * @param path The path to the rich message.
      * @return The rich message.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public Component getRichMessage(String path) {
+        if (path == null) throw new NullPointerException("Path cannot be null");
         return config.getRichMessage(path);
     }
 
@@ -281,8 +309,10 @@ public class Config {
      * @param path The path to the rich message.
      * @param def  The default rich message.
      * @return The rich message or the default.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public Component getRichMessage(String path, Component def) {
+        if (path == null) throw new NullPointerException("Path cannot be null");
         return config.getRichMessage(path, def);
     }
 
@@ -291,6 +321,7 @@ public class Config {
      *
      * @param path The path to the list.
      * @return The list of strings.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public List<String> getStringList(String path) {
         if (path == null) throw new NullPointerException("Path cannot be null");
@@ -302,6 +333,7 @@ public class Config {
      *
      * @param path The path to the list.
      * @return The list of integers.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public List<Integer> getIntegerList(String path) {
         if (path == null) throw new NullPointerException("Path cannot be null");
@@ -313,6 +345,7 @@ public class Config {
      *
      * @param path The path to the list.
      * @return The list of booleans.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public List<Boolean> getBooleanList(String path) {
         if (path == null) throw new NullPointerException("Path cannot be null");
@@ -324,6 +357,7 @@ public class Config {
      *
      * @param path The path to the list.
      * @return The list of doubles.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public List<Double> getDoubleList(String path) {
         if (path == null) throw new NullPointerException("Path cannot be null");
@@ -353,8 +387,10 @@ public class Config {
      *
      * @param path The path to check.
      * @return True if the value is a configuration section, otherwise false.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public boolean isConfigurationSection(String path) {
+        if (path == null) throw new NullPointerException("Path cannot be null");
         return config.isConfigurationSection(path);
     }
 
@@ -363,8 +399,10 @@ public class Config {
      *
      * @param path The path to check.
      * @return True if the value is an ItemStack, otherwise false.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public boolean isItemStack(String path) {
+        if (path == null) throw new NullPointerException("Path cannot be null");
         return config.isItemStack(path);
     }
 
@@ -373,8 +411,10 @@ public class Config {
      *
      * @param path The path to check.
      * @return True if the value is an OfflinePlayer, otherwise false.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public boolean isOfflinePlayer(String path) {
+        if (path == null) throw new NullPointerException("Path cannot be null");
         return config.isOfflinePlayer(path);
     }
 
@@ -383,8 +423,10 @@ public class Config {
      *
      * @param path The path to check.
      * @return True if the path is set, otherwise false.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public boolean isSet(String path) {
+        if (path == null) throw new NullPointerException("Path cannot be null");
         return config.isSet(path);
     }
 
@@ -393,8 +435,10 @@ public class Config {
      *
      * @param path The path to check.
      * @return True if the value is a Vector, otherwise false.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public boolean isVector(String path) {
+        if (path == null) throw new NullPointerException("Path cannot be null");
         return config.isVector(path);
     }
 
@@ -403,8 +447,10 @@ public class Config {
      *
      * @param path The path to check.
      * @return True if the value is a Location, otherwise false.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public boolean isLocation(String path) {
+        if (path == null) throw new NullPointerException("Path cannot be null");
         return config.isLocation(path);
     }
 
@@ -413,8 +459,10 @@ public class Config {
      *
      * @param path The path to check.
      * @return True if the value is a Color, otherwise false.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public boolean isColor(String path) {
+        if (path == null) throw new NullPointerException("Path cannot be null");
         return config.isColor(path);
     }
 
@@ -423,8 +471,10 @@ public class Config {
      *
      * @param path The path to check.
      * @return True if the value is a String, otherwise false.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public boolean isString(String path) {
+        if (path == null) throw new NullPointerException("Path cannot be null");
         return config.isString(path);
     }
 
@@ -433,8 +483,10 @@ public class Config {
      *
      * @param path The path to check.
      * @return True if the value is a double, otherwise false.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public boolean isDouble(String path) {
+        if (path == null) throw new NullPointerException("Path cannot be null");
         return config.isDouble(path);
     }
 
@@ -443,8 +495,10 @@ public class Config {
      *
      * @param path The path to check.
      * @return True if the value is an integer, otherwise false.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public boolean isInt(String path) {
+        if (path == null) throw new NullPointerException("Path cannot be null");
         return config.isInt(path);
     }
 
@@ -453,8 +507,10 @@ public class Config {
      *
      * @param path The path to check.
      * @return True if the value is a list, otherwise false.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public boolean isList(String path) {
+        if (path == null) throw new NullPointerException("Path cannot be null");
         return config.isList(path);
     }
 
@@ -463,8 +519,10 @@ public class Config {
      *
      * @param path The path to check.
      * @return True if the value is a long, otherwise false.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public boolean isLong(String path) {
+        if (path == null) throw new NullPointerException("Path cannot be null");
         return config.isLong(path);
     }
 
@@ -473,8 +531,10 @@ public class Config {
      *
      * @param path The path to check.
      * @return True if the value is a boolean, otherwise false.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public boolean isBoolean(String path) {
+        if (path == null) throw new NullPointerException("Path cannot be null");
         return config.isBoolean(path);
     }
 
@@ -483,6 +543,7 @@ public class Config {
      *
      * @param path The path to the list.
      * @return The list of bytes.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public List<Byte> getByteList(String path) {
         if (path == null) throw new NullPointerException("Path cannot be null");
@@ -494,6 +555,7 @@ public class Config {
      *
      * @param path The path to the list.
      * @return The list of shorts.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public List<Short> getShortList(String path) {
         if (path == null) throw new NullPointerException("Path cannot be null");
@@ -505,6 +567,7 @@ public class Config {
      *
      * @param path The path to the list.
      * @return The list of floats.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public List<Float> getFloatList(String path) {
         if (path == null) throw new NullPointerException("Path cannot be null");
@@ -516,6 +579,7 @@ public class Config {
      *
      * @param path The path to the list.
      * @return The list of longs.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public List<Long> getLongList(String path) {
         if (path == null) throw new NullPointerException("Path cannot be null");
@@ -527,6 +591,7 @@ public class Config {
      *
      * @param path The path to the list.
      * @return The list of maps.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public List<Map<?, ?>> getMapList(String path) {
         if (path == null) throw new NullPointerException("Path cannot be null");
@@ -538,6 +603,7 @@ public class Config {
      *
      * @param path The path to the location.
      * @return The location.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public Location getLocation(String path) {
         if (path == null) throw new NullPointerException("Path cannot be null");
@@ -550,6 +616,7 @@ public class Config {
      * @param path The path to the location.
      * @param def  The default location.
      * @return The location or the default.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public Location getLocation(String path, Location def) {
         if (path == null) throw new NullPointerException("Path cannot be null");
@@ -561,6 +628,7 @@ public class Config {
      *
      * @param path The path to the item stack.
      * @return The item stack.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public ItemStack getItemStack(String path) {
         if (path == null) throw new NullPointerException("Path cannot be null");
@@ -573,6 +641,7 @@ public class Config {
      * @param path The path to the item stack.
      * @param def  The default item stack.
      * @return The item stack or the default.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public ItemStack getItemStack(String path, ItemStack def) {
         if (path == null) throw new NullPointerException("Path cannot be null");
@@ -584,6 +653,7 @@ public class Config {
      *
      * @param path The path to the color.
      * @return The color.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public Color getColor(String path) {
         if (path == null) throw new NullPointerException("Path cannot be null");
@@ -596,6 +666,7 @@ public class Config {
      * @param path The path to the color.
      * @param def  The default color.
      * @return The color or the default.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public Color getColor(String path, Color def) {
         if (path == null) throw new NullPointerException("Path cannot be null");
@@ -607,6 +678,7 @@ public class Config {
      *
      * @param path The path to the section.
      * @return The comments.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public List<String> getComments(String path) {
         if (path == null) throw new NullPointerException("Path cannot be null");
@@ -618,6 +690,7 @@ public class Config {
      *
      * @param path  The path to the value.
      * @param value The value to set.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public void set(String path, Object value) {
         if (path == null) throw new NullPointerException("Path cannot be null");
@@ -629,6 +702,7 @@ public class Config {
      *
      * @param path The path to the section.
      * @return The new section.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public ConfigurationSection createSection(String path) {
         if (path == null) throw new NullPointerException("Path cannot be null");
@@ -641,6 +715,7 @@ public class Config {
      * @param path   The path to the section.
      * @param values The initial values for the section.
      * @return The new section.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public ConfigurationSection createSection(String path, Map<?, ?> values) {
         if (path == null) throw new NullPointerException("Path cannot be null");
@@ -652,6 +727,7 @@ public class Config {
      *
      * @param path The path to the section.
      * @return The section.
+     * @throws NullPointerException If the path is {@code null}.
      */
     public ConfigurationSection getConfigurationSection(String path) {
         if (path == null) throw new NullPointerException("Path cannot be null");
@@ -662,6 +738,7 @@ public class Config {
      * Adds default values to the configuration.
      *
      * @param defaults The default values.
+     * @throws NullPointerException If the defaults are {@code null}.
      */
     public void addDefaults(Map<String, Object> defaults) {
         if (defaults == null) throw new NullPointerException("Defaults cannot be null");

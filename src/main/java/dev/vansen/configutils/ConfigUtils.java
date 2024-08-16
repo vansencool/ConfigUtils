@@ -44,15 +44,28 @@ public class ConfigUtils {
     }
 
     /**
-     * Asynchronously loads a configuration file based on the provided file name.
+     * Loads a configuration file based on the provided file name.
      * <p>
-     * This method delegates the actual loading operation to the {@link Config#load(String)} method and returns a {@link CompletableFuture}
-     * that completes with the loaded {@link Config} object once the operation is finished.
+     * This method delegates the actual loading operation to the {@link Configer#load(String)} method and returns the loaded {@link Configer} object.
      *
      * @param fileName The name of the configuration file to load.
-     * @return A {@link CompletableFuture} that completes with the loaded {@link Config} object.
+     * @return The loaded {@link Configer} object.
      */
-    public static CompletableFuture<Config> get(String fileName) {
-        return Config.load(fileName);
+    public static Configer get(String fileName) {
+        return Configer.load(fileName);
     }
+
+    /**
+     * Asynchronously loads a configuration file based on the provided file name.
+     * <p>
+     * This method delegates the actual loading operation to the {@link Configer#load(String)} method and returns a {@link CompletableFuture}
+     * that completes with the loaded {@link Configer} object once the operation is finished.
+     *
+     * @param fileName The name of the configuration file to load.
+     * @return A {@link CompletableFuture} that completes with the loaded {@link Configer} object.
+     */
+    public static CompletableFuture<Configer> getAsync(String fileName) {
+        return Configer.loadAsync(fileName);
+    }
+
 }
