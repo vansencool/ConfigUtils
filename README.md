@@ -13,7 +13,7 @@ repositories {
 
 ```groovy
 dependencies {
-    implementation 'com.github.vansencool:ConfigUtils:1.0.1'
+    implementation 'com.github.vansencool:ConfigUtils:1.0.2'
 }
 ```
 
@@ -30,6 +30,6 @@ dependencies {
 <dependency>
     <groupId>com.github.vansencool</groupId>
     <artifactId>ConfigUtils</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 </dependency>
 ```
